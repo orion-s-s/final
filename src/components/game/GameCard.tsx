@@ -1,4 +1,12 @@
-import type { GameCardData } from "@/lib/game-data";
+import type { FriendCard, MultiverseCard, ShadowCard } from "@/lib/game-data";
+import {
+  MULTIVERSE_DEF_EACH,
+  SHADOW_TRAITS,
+  STAT_META,
+  hpFromStrength,
+  scaleStats,
+  statAtLevel,
+} from "@/lib/game-data";
 import { cn } from "@/lib/utils";
 
 const colorBg: Record<string, string> = {
@@ -9,11 +17,11 @@ const colorBg: Record<string, string> = {
   weird: "bg-weird/45",
 };
 
-function Stat({ icon, value, tint }: { icon: string; value: number; tint: string }) {
+function Stat({ icon, value, tint }: { icon: string; value: number | string; tint: string }) {
   return (
     <span
       className={cn(
-        "sketch-border-alt flex min-w-9 items-center justify-center gap-1 px-1.5 py-0.5 font-display text-xs font-bold text-ink",
+        "sketch-border-alt flex min-w-9 items-center justify-center gap-1 px-1.5 py-0.5 font-display text-[11px] font-bold text-ink",
         tint,
       )}
     >
@@ -23,24 +31,37 @@ function Stat({ icon, value, tint }: { icon: string; value: number; tint: string
   );
 }
 
+const statTint: Record<string, string> = {
+  atk: "bg-coral",
+  spd: "bg-sky",
+  mag: "bg-weird/40",
+  aura: "bg-sunshine",
+  crt: "bg-coral/60",
+  lck: "bg-mint",
+};
+
+export type AnyCard = FriendCard | ShadowCard | MultiverseCard;
+
 export function GameCard({
   card,
   size = "md",
   selected,
   onClick,
-  levelBonus = 0,
+  level = 1,
   className,
 }: {
-  card: GameCardData;
+  card: AnyCard;
   size?: "sm" | "md" | "lg";
   selected?: boolean;
   onClick?: () => void;
-  levelBonus?: number;
+  level?: number;
   className?: string;
 }) {
   const isShadow = card.frame === "shadow";
   const isMulti = card.frame === "multiverse";
   const widths = { sm: "w-32", md: "w-44", lg: "w-56" };
+
+  const friendStats = card.frame === "friend" ? scaleStats(card.stats, level) : null;
 
   return (
     <button
@@ -70,9 +91,11 @@ export function GameCard({
         >
           {card.name}
         </h3>
-        <span className="sketch-border-alt bg-weird px-1.5 font-display text-[10px] font-bold text-paper">
-          Lv{card.level + levelBonus}
-        </span>
+        {!isMulti && (
+          <span className="sketch-border-alt bg-weird px-1.5 font-display text-[10px] font-bold text-paper">
+            Lv{level}
+          </span>
+        )}
       </div>
       <p className={cn("font-hand text-[11px]", isShadow ? "text-weird-soft" : "text-muted-foreground")}>
         {card.title}
@@ -94,24 +117,56 @@ export function GameCard({
         />
       </div>
 
-      <div className="mb-2 flex items-center justify-between gap-1">
-        <Stat icon="⚔" value={card.attack + levelBonus} tint="bg-coral" />
-        <Stat icon="❤" value={card.health + levelBonus * 2} tint="bg-mint" />
-        <Stat icon="⚡" value={card.speed} tint="bg-sky" />
-      </div>
+      {friendStats && (
+        <>
+          <div className="mb-1 flex items-center justify-between gap-1">
+            <Stat icon="❤" value={hpFromStrength(friendStats.atk)} tint="bg-mint" />
+            <Stat icon="🛡" value={0} tint="bg-paper-shade" />
+          </div>
+          <div className="mb-2 grid grid-cols-3 gap-1">
+            {STAT_META.map((s) => (
+              <Stat key={s.key} icon={s.short} value={friendStats[s.key]} tint={statTint[s.key]!} />
+            ))}
+          </div>
+        </>
+      )}
+
+      {card.frame === "shadow" && (
+        <div className="mb-2 space-y-0.5">
+          {SHADOW_TRAITS.map((t) => (
+            <p key={t.key} className="flex justify-between font-hand text-[11px] text-paper">
+              <span>{t.label}</span>
+              <span className="font-display text-sunshine">
+                {statAtLevel(card.traits[t.key], level)} → {t.grantLabel}
+              </span>
+            </p>
+          ))}
+        </div>
+      )}
 
       <div className={cn("sketch-border-alt px-2 py-1", isShadow ? "bg-blot/60" : "bg-paper-shade")}>
-        <p
-          className={cn(
-            "font-display text-[11px] font-bold",
-            isShadow ? "text-sunshine" : "text-weird",
-          )}
-        >
-          {card.ability.name}
-        </p>
-        <p className={cn("font-hand text-[11px] leading-tight", isShadow ? "text-paper" : "text-ink")}>
-          {card.ability.text}
-        </p>
+        {card.frame === "friend" && (
+          <>
+            <p className="font-display text-[11px] font-bold text-weird">{card.special.name}</p>
+            <p className="font-hand text-[11px] leading-tight text-ink">{card.special.text}</p>
+          </>
+        )}
+        {card.frame === "shadow" && (
+          <>
+            <p className="font-display text-[11px] font-bold text-sunshine">Commander aura</p>
+            <p className="font-hand text-[11px] leading-tight text-paper">
+              Each trait grants its stat +trait/30 to every friend. Never enters the page.
+            </p>
+          </>
+        )}
+        {card.frame === "multiverse" && (
+          <>
+            <p className="font-display text-[11px] font-bold text-weird">Pre-battle armour</p>
+            <p className="font-hand text-[11px] leading-tight text-ink">
+              +{MULTIVERSE_DEF_EACH} DEF to every friend for one fight.
+            </p>
+          </>
+        )}
       </div>
 
       {size === "lg" && (
