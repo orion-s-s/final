@@ -133,7 +133,7 @@ function SquadScreen() {
               const up = levelCost(lvl + 1);
               return (
                 <div key={i} className="relative">
-                  <GameCard card={card} level={lvl} className={down ? "opacity-50" : undefined} />
+                  <GameCard card={card} level={lvl} className={down ? "opacity-50" : ""} />
                   {!locked && (
                     <button
                       type="button"
