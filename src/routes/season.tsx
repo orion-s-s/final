@@ -51,7 +51,7 @@ function SeasonScreen() {
     <DeskScene
       title="Season 3 · Rating"
       back={{ to: "/", label: "Menu" }}
-      hud={<TokenPill tokens={state.tokens} />}
+      hud={<TokenPill tokens={state.weird} />}
     >
       <div className="grid gap-6 lg:grid-cols-[1fr_320px]">
         <div>

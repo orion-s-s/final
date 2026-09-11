@@ -11,12 +11,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A hand-drawn card-strategy game living inside a child's sketchbook. Connect Keplr, build a squad of friends and shadows, and battle the Blot.",
+          "A hand-drawn card-strategy game living inside a child's sketchbook. Build a squad of friends under a shadow commander and battle the Blot across ten chapters.",
       },
       { property: "og:title", content: "Weird Wars — Wake the Drawings, Fight the Blot" },
       {
         property: "og:description",
-        content: "Card-strategy battles in a living sketchbook. Campaign, duels and seasonal ranking.",
+        content: "Card-strategy battles in a living sketchbook. Campaign, endless waves and seasonal ranking.",
       },
     ],
   }),
@@ -113,7 +113,7 @@ function MenuScreen() {
             <span className="sketch-border-alt bg-mint px-3 py-1 font-hand text-sm text-ink">
               {state.address}
             </span>
-            <TokenPill tokens={state.tokens} />
+            <TokenPill tokens={state.weird} />
           </>
         ) : null
       }
@@ -169,25 +169,24 @@ function MenuScreen() {
               }}
             />
             <ModeCard
-              title="Duel vs Human"
-              blurb="Real opponent, real mess."
+              title="Endless Waves"
+              blurb="Survive wave after wave for XP."
               tone="mint"
               icon={<DuelIcon />}
               disabled={!state.connected}
               onClick={() => {
-                setGameState({ mode: "human" });
-                navigate({ to: "/duel-human" });
+                setGameState({ mode: "endless", endlessWave: 1 });
+                navigate({ to: "/squad" });
               }}
             />
             <ModeCard
-              title="Duel vs AI"
-              blurb="Practise against the Blot brain."
+              title="Training"
+              blurb="No shadow, no rewards, no risk."
               tone="sky"
               icon={<BotIcon />}
-              disabled={!state.connected}
               onClick={() => {
-                setGameState({ mode: "ai" });
-                navigate({ to: "/duel-ai" });
+                setGameState({ mode: "training" });
+                navigate({ to: "/squad" });
               }}
             />
           </div>
