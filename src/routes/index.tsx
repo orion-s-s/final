@@ -11,12 +11,12 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "A hand-drawn card-strategy game living inside a child's sketchbook. Connect Keplr, build a squad of friends and shadows, and battle the Blot.",
+          "A hand-drawn card-strategy game living inside a child's sketchbook. Build a squad of friends under a shadow commander and battle the Blot across ten chapters.",
       },
       { property: "og:title", content: "Weird Wars — Wake the Drawings, Fight the Blot" },
       {
         property: "og:description",
-        content: "Card-strategy battles in a living sketchbook. Campaign, duels and seasonal ranking.",
+        content: "Card-strategy battles in a living sketchbook. Campaign, endless waves and seasonal ranking.",
       },
     ],
   }),

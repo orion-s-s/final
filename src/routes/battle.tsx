@@ -51,7 +51,9 @@ function BattleScreen() {
   const chapter = CAMPAIGN_LEVELS.find((c) => c.id === state.selectedLevel) ?? CAMPAIGN_LEVELS[0]!;
 
   const setup = useMemo(() => {
-    const friends = buildFriends(state);
+    const friends = buildFriends(
+      state.mode === "training" ? { ...state, commander: null } : state,
+    );
     const roster =
       state.mode === "campaign"
         ? chapter.encounter
