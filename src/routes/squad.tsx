@@ -71,7 +71,7 @@ function SquadScreen() {
       hud={
         <>
           <span className="sketch-border-alt bg-sky px-3 py-1 font-hand text-sm text-ink">{levelName}</span>
-          <TokenPill tokens={state.tokens} />
+          <TokenPill tokens={state.weird} />
         </>
       }
     >

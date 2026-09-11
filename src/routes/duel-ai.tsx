@@ -54,7 +54,7 @@ function DuelAiScreen() {
   const [stake, setStake] = useState(100);
 
   return (
-    <DeskScene title="Duel vs AI" back={{ to: "/", label: "Menu" }} hud={<TokenPill tokens={state.tokens} />}>
+    <DeskScene title="Duel vs AI" back={{ to: "/", label: "Menu" }} hud={<TokenPill tokens={state.weird} />}>
       <div className="grid gap-6 lg:grid-cols-[1fr_300px]">
         <div>
           <h2 className="font-display text-xl font-extrabold text-ink">Choose the Blot brain</h2>

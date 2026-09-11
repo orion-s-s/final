@@ -42,7 +42,7 @@ function DuelHumanScreen() {
   const mmss = `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 
   return (
-    <DeskScene title="Duel vs Human" back={{ to: "/", label: "Menu" }} hud={<TokenPill tokens={state.tokens} />}>
+    <DeskScene title="Duel vs Human" back={{ to: "/", label: "Menu" }} hud={<TokenPill tokens={state.weird} />}>
       <div className="flex flex-col items-center py-8 text-center">
         <div className="relative h-48 w-48">
           <img
